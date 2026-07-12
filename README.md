@@ -1,1 +1,19 @@
-# study-copilot
+# 🧠 StudyCopilot
+## AI-powered Quiz Generator and Learning Assistant
+
+## Overview
+
+StudyCopilot is an AI learning assistant that transforms educational documents into personalized quizzes.
+
+Users can upload documents (PDF, Word, Markdown), and the system automatically:
+
+- extracts the content
+- understands the document structure
+- generates high-quality multiple-choice questions
+- provides explanations for answers
+- creates personalized revision sessions
+
+
+The goal is to explore how Large Language Models can enhance learning through Retrieval-Augmented Generation (RAG), embeddings and AI agents.
+
+---
