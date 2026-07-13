@@ -25,6 +25,7 @@ venv/
 # Data
 data/raw/
 data/processed/
+data/uploads/
 
 # Notebooks
 .ipynb_checkpoints/
