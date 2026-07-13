@@ -1,8 +1,4 @@
-import sys
 from pathlib import Path
-
-# Add parent directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import streamlit as st
 from studycopilot.ingestion.loaders import load_document
@@ -28,16 +24,16 @@ if uploaded_file:
 
     st.success("Document uploaded successfully!")
 
-    text = load_document(destination)
+    document = load_document(destination)
 
     st.metric(
         label="Number of characters",
-        value=len(text),
+        value=len(document.text),
     )
 
     st.subheader("Preview")
     st.text_area(
-    "Preview",
-    value=text[:1000],
-    height=300,
+        label=document.filename,
+        value=document.text[:1000],
+        height=300,
 )

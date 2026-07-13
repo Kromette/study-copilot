@@ -1,4 +1,5 @@
-from src.studycopilot.config import settings
+from studycopilot.config import settings
+
 
 def main():
     print("Hello from study-copilot!")
