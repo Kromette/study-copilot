@@ -1,20 +1,18 @@
 from sentence_transformers import SentenceTransformer
 
-
 MODEL_NAME = "BAAI/bge-small-en-v1.5"
-
 
 model = SentenceTransformer(MODEL_NAME)
 
 
-def embed(text: str) -> list[float]:
-    """
-    Convert text into an embedding vector.
-    """
+def embed_documents(
+    texts: list[str]
+) -> list[list[float]]:
 
-    embedding = model.encode(
-        text,
-        normalize_embeddings=True
+    embeddings = model.encode(
+        texts,
+        normalize_embeddings=True,
+        batch_size=32
     )
 
-    return embedding.tolist()
+    return embeddings.tolist()

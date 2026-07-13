@@ -24,3 +24,12 @@ git clone https://github.com/username/study-copilot
 cd study-copilot
 
 uv sync
+
+---
+
+### This tool is a work in progress
+TODO : 
+- Add a hash for each document
+- Improve chunk sizes and overlap
+- Implement retrieval
+- Implement the QCM generation

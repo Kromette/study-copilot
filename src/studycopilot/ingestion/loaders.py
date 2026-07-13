@@ -10,6 +10,7 @@ SUPPORTED_EXTENSIONS = {".pdf", ".docx"}
 class LoadedDocument:
     filename: str
     text: str
+    page: int | None = None
 
 
 def load_document(file_path: Path) -> LoadedDocument:
@@ -51,18 +52,25 @@ def _load_docx(file_path: Path) -> LoadedDocument:
     return LoadedDocument(filename=file_path.name, text="\n".join(paragraphs))
 
 
-def _load_pdf(file_path: Path) -> LoadedDocument:
-    """Extract text from a PDF."""
-
+def _load_pdf(file_path: Path):
+    source = Path(file_path).name
     pages = []
 
     with fitz.open(file_path) as pdf:
-        for page_number, page in enumerate(pdf, start=1):
-            pages.append(
-                {
-                    "page": page_number,
-                    "text": page.get_text(),
-                }
-            )
 
-    return LoadedDocument(filename=file_path.name, text="\n".join(page["text"] for page in pages))
+        for page_number, page in enumerate(pdf, start=1):
+
+            text = page.get_text()
+
+            if text.strip():
+
+                pages.append(
+                    {
+                        "text": text,
+                        "page": page_number,
+                        "source": source,
+                        "total_pages": len(pdf)
+                    }
+                )
+
+    return pages
