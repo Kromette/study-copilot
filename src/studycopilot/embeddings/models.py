@@ -16,3 +16,10 @@ def embed_documents(
     )
 
     return embeddings.tolist()
+
+def embed_query(text):
+
+    return model.encode(
+        text,
+        normalize_embeddings=True
+    ).tolist()

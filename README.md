@@ -33,3 +33,4 @@ TODO :
 - Improve chunk sizes and overlap
 - Implement retrieval
 - Implement the QCM generation
+- Add query filters
