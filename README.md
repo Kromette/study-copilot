@@ -17,3 +17,10 @@ Users can upload documents (PDF, Word, Markdown), and the system automatically:
 The goal is to explore how Large Language Models can enhance learning through Retrieval-Augmented Generation (RAG), embeddings and AI agents.
 
 ---
+## Installation
+
+git clone https://github.com/username/study-copilot
+
+cd study-copilot
+
+uv sync

@@ -1,0 +1,33 @@
+# Environment variables
+.env
+.env.*
+
+# But keep example files
+!.env.example
+
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Data
+data/raw/
+data/processed/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Logs
+*.log
