@@ -40,7 +40,8 @@ def index_chunks(chunks):
                     "page": chunk.page,
                     "chunk_id": chunk.chunk_id,
                     "chunk_index_in_page": chunk.chunk_index_in_page,
-                    "total_pages": chunk.total_pages
+                    "total_pages": chunk.total_pages,
+                    "file_hash": chunk.file_hash
                 }
             )
         )

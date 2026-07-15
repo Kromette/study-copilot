@@ -1,48 +1,164 @@
 from studycopilot.retrieval.schema import RetrievedChunk
 
-def build_mcq_prompt(user_question: str, context: list[RetrievedChunk], nb_questions: int = 1) -> str:
-    """
-    Build a prompt for generating a multiple-choice question (MCQ) based on the user's question and context.
 
-    Args:
-        user_question (str): The user's question.
-        context (list[RetrievedChunk]): The context or information to base the MCQ on.
-        nb_questions (int): The number of questions to generate.
-
-    Returns:
-        str: A formatted prompt string for generating an MCQ.
+def build_mcq_prompt(
+    user_question: str,
+    context: list[RetrievedChunk],
+    nb_questions: int = 1,
+) -> str:
     """
+    Build a prompt for generating MCQs from retrieved RAG context.
+    """
+
+
+    formatted_context = "\n\n".join(
+        [
+            f"""
+--- CONTEXT CHUNK {i+1} ---
+Relevance score: {chunk.score}
+Source: {chunk.source}
+Page: {chunk.page}
+
+Content:
+{chunk.text}
+"""
+            for i, chunk in enumerate(context)
+        ]
+    )
+
+
     prompt = f"""
-ROLE: Expert science teacher
-You are an expert science teacher who writes clear, exam-style multiple-choice questions (MCQs) for revision.
+ROLE:
+You are an expert science teacher creating high-quality exam-style
+multiple-choice questions for students.
 
-OBJECTIVE:
-Generate {nb_questions} MCQ(s) that address the user's request: {user_question}
 
-CONTEXT:
-Use ONLY information contained in the provided context: {context}
-Do NOT invent facts or use external knowledge beyond the context.
+TASK:
+Generate {nb_questions} MCQ(s) ONLY about the requested topic.
 
-REQUIREMENTS (mandatory):
-- Output must be valid JSON and NOTHING else (no explanation outside JSON).
-- Return a JSON list with exactly {nb_questions} question object(s).
-- Provide exactly 4 options in the "options" list for each question.
-- Indicate the correct option by the 0-based integer field "correct_option_index".
-- Include a short "explanation" (<=30 words) that cites how the context supports the answer.
-- Include "references": a list of objects with keys "source" and "page" referencing the context entries used.
 
-OUTPUT SCHEMA (exact keys required):
-[{{"question": "<string>", "options": ["<str>", "<str>", "<str>", "<str>"], "correct_option_index": <int 0-3>, "explanation": "<string up to 30 words>", "references": [{{"source":"<filename>","page":<int>}}]}}]
+========================
+REQUESTED TOPIC
+========================
 
-EXAMPLE (for illustration only - your output must be JSON exactly like the schema):
-User question: "Ask le about the functions of amino acids."
-Context: [RetrievedChunk(source='cours.pdf', page=1, text='Amino acids are the building blocks of proteins. They play a crucial role in various biological processes.')]
-Output: [{{"question": "What is a primary function of amino acids?", "options": ["Building blocks of proteins", "Main energy storage molecules", "Structural lipids", "Digestive enzymes"], "correct_option_index": 0, "explanation": "Amino acids are described as building blocks of proteins in the provided context.", "references": [{{"source":"cours.pdf","page":1}}]}}]
+{user_question}
 
-If the context does not contain enough information to answer the user question, return exactly:
-{{"error": "insufficient_context"}}
 
-Return only the JSON list that matches the schema above.
-    """
+========================
+CONTEXT USAGE RULES
+========================
+
+You are provided with retrieved document chunks.
+
+IMPORTANT:
+- The chunks are ranked by relevance score.
+- The first chunks are usually more relevant than later chunks.
+- Some chunks may be partially or completely unrelated to the requested topic.
+- The requested topic may correspond to a chapter title, section title, or concept name. Prefer chunks containing this exact terminology.
+
+You MUST:
+- Use ONLY information from chunks directly related to the requested topic.
+- Ignore unrelated chunks.
+- Never create questions from another chapter, section, or subject.
+- Never combine unrelated concepts to create a question.
+- Never use external knowledge.
+
+
+========================
+QUESTION QUALITY RULES
+========================
+
+Each generated question must:
+
+- Directly test knowledge about the requested topic.
+- Not be about titles or headings.
+- Be answerable using ONLY the selected context.
+- Have one and only one correct answer.
+- Be suitable for exam revision.
+- Avoid vague questions.
+- Avoid questions requiring information not present in the context.
+
+
+Before generating each question, internally verify:
+
+1. Is this question about the requested topic (not the title or header)?
+2. Can the answer be found explicitly in the context?
+3. Am I using only relevant chunks?
+
+
+If any answer is NO, discard the question and generate another one.
+
+
+========================
+OUTPUT REQUIREMENTS
+========================
+
+Return ONLY valid JSON.
+
+No markdown.
+No explanation outside JSON.
+
+
+Return exactly {nb_questions} objects.
+
+
+Each object must contain:
+
+- question: string
+- options: exactly 4 strings
+- correct_option_index: integer from 0 to 3
+- explanation: maximum 30 words
+- references: list containing source and page
+
+
+JSON schema:
+
+[
+  {{
+    "question": "...",
+    "options": [
+      "...",
+      "...",
+      "...",
+      "..."
+    ],
+    "correct_option_index": 0,
+    "explanation": "...",
+    "references": [
+      {{
+        "source": "filename.pdf",
+        "page": 1
+      }}
+    ]
+  }}
+]
+
+
+========================
+RETRIEVED CONTEXT
+========================
+
+{formatted_context}
+
+
+========================
+FINAL CHECK
+========================
+
+Before returning the JSON:
+
+- Verify every question relates to:
+"{user_question}"
+
+- Remove any question related to another topic.
+
+- If the context is insufficient, return:
+
+{{
+    "error": "insufficient_context"
+}}
+
+Return only JSON.
+"""
 
     return prompt

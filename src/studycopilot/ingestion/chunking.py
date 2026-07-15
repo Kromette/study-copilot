@@ -9,7 +9,7 @@ splitter = RecursiveCharacterTextSplitter(
 )
 
 
-def create_chunks(pages, document_id):
+def create_chunks(pages, document_id, file_hash,):
 
     chunks = []
 
@@ -41,7 +41,9 @@ def create_chunks(pages, document_id):
 
                     document_id=document_id,
 
-                    total_pages=page["total_pages"]
+                    total_pages=page["total_pages"],
+
+                    file_hash=file_hash
                 )
             )
 

@@ -5,9 +5,17 @@ from studycopilot.embeddings.models import embed_query
 
 
 
-def search(query, top_k=5):
+def search(query, top_k=3):
 
-    query_vector = embed_query(query)
+    search_query = f"""
+    Content and concepts related to:
+    {query}
+
+    Find explanations, definitions, mechanisms and important facts.
+    Ignore chapter titles.
+    """
+
+    query_vector = embed_query(search_query)
 
 
     results = client.query_points(
@@ -15,7 +23,6 @@ def search(query, top_k=5):
         query=query_vector,
         limit=top_k
     )
-
 
     chunks=[]
 

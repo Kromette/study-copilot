@@ -12,4 +12,5 @@ class DocumentChunk:
     chunk_index_in_page: int
     document_id: str
     total_pages: int
+    file_hash: str
     page: int | None = None

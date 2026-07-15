@@ -27,10 +27,35 @@ uv sync
 
 ---
 
-### This tool is a work in progress
-TODO : 
-- Add a hash for each document
-- Improve chunk sizes and overlap
-- Implement retrieval
-- Implement the QCM generation
-- Add query filters
+### 🚧 This project is a work in progress : roadmap
+
+## Retrieval
+- [ ] Tune chunk size and overlap
+- [ ] Add metadata-based filtering (document, page, chapter)
+- [ ] Implement Parent-Child Retrieval
+- [ ] Explore Hybrid Search (semantic + keyword/BM25)
+- [ ] Add retrieval reranking
+
+## Generation
+- [ ] Improve prompt engineering for topic-focused question generation
+- [ ] Add support for multiple LLM providers (Ollama, OpenAI, Azure OpenAI, Anthropic)
+- [ ] Generate adaptive quizzes based on difficulty level
+- [ ] Generate flashcards in addition to MCQs
+
+## Evaluation
+- [ ] Build an evaluation dataset with expected retrieval results
+- [ ] Measure retrieval quality (Recall@K, MRR, Precision@K)
+- [ ] Evaluate generation quality (faithfulness, relevance, JSON validity)
+- [ ] Compare prompts and embedding models with MLflow
+- [ ] Integrate Ragas for automatic RAG evaluation
+
+## Observability
+- [ ] Integrate Langfuse for prompt tracing and monitoring
+- [ ] Track latency and embedding generation time
+- [ ] Track LLM token usage and inference cost
+
+## Engineering
+- [ ] Add unit and integration tests
+- [ ] Improve project configuration and logging
+- [ ] Add CI with GitHub Actions
+- [ ] Containerize the application with Docker
